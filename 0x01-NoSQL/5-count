@@ -1,2 +1,2 @@
 // 5. Count, displays the number of documents
-db.school.find().Count()
+db.school.find().count()
