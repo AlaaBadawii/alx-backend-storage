@@ -1,0 +1,2 @@
+// 4. All matches. lists all matches documents
+db.school.find({ "name": "Holberton school" });
