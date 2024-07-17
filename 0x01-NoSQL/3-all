@@ -1,0 +1,2 @@
+// 3. All documents. lists all documents
+db.school.find();
