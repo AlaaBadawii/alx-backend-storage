@@ -1,1 +1,2 @@
+// Find documents with a specific field in a collection
 db.school.find({ 'name': /^Holberton/ });
