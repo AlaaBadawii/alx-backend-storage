@@ -10,16 +10,14 @@ from functools import wraps
 def count_calls(method: Callable) -> Callable:
     '''Tracks the number of calls made to a method in a Cache class.
     '''
-    key = method.__qualname__
-
     @wraps(method)
-    def wraper(self, *args, **kwargs) -> Any:
-        """ Invokes the given method after incrementing its call counter.
-        """
-        if isinstance(self._redis, redis.Redis()):
-            self._redis.incr(key)
+    def invoker(self, *args, **kwargs) -> Any:
+        '''Invokes the given method after incrementing its call counter.
+        '''
+        if isinstance(self._redis, redis.Redis):
+            self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
-    return wraper
+    return invoker
 
 
 class Cache():
