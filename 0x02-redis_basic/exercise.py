@@ -38,7 +38,7 @@ def call_history(method: Callable) -> Callable:
             self._redis.rpush(output_key, str(output))
 
             return output
-        return invoker
+    return invoker
 
 
 class Cache():
