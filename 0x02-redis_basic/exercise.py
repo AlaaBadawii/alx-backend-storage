@@ -27,17 +27,15 @@ def call_history(method: Callable) -> Callable:
     def invoker(self, *args, **kwargs) -> Any:
         """ Invokes the given method after caching it's input and output.
         """
+        input_key = method.__qualname__ + ":input"
+        output_key = method.__qualname__ + ":output"
         if isinstance(self._redis, redis.Redis):
-            input_key = method.__qualname__ + ":input"
-            output_key = method.__qualname__ + ":output"
-
             self._redis.rpush(input_key, str(args))
 
-            output = self.method(*args, **kwargs)
-
+        output = self.method(*args, **kwargs)
+        if isinstance(self._redis, redis.Redis):
             self._redis.rpush(output_key, str(output))
-
-            return output
+        return output
     return invoker
 
 
