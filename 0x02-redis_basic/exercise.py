@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """ exercise module
 """
-from functools import wraps
 import redis
 import uuid
 from typing import Any, Union, Callable, Optional
+from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
     '''Tracks the number of calls made to a method in a Cache class.
     '''
+    key = method.__qualname__
+
     @wraps(method)
-    def invoker(self, *args, **kwargs) -> Any:
-        '''Invokes the given method after incrementing its call counter.
-        '''
-        if isinstance(self._redis, redis.Redis):
-            self._redis.incr(method.__qualname__)
+    def wraper(self, *args, **kwargs) -> Any:
+        """ Invokes the given method after incrementing its call counter.
+        """
+        if isinstance(self._redis, redis.Redis()):
+            self._redis.incr(key)
         return method(self, *args, **kwargs)
-    return invoker
+    return wraper
 
 
 class Cache():
