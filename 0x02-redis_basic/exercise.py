@@ -63,7 +63,6 @@ def replay(method: Callable) -> str:
         ))
 
 
-
 class Cache():
     """ caching system
     """
