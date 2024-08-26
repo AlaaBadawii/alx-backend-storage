@@ -10,6 +10,8 @@ class Cache():
     """ caching system
     """
     def __init__(self) -> None:
+        """ Initials a cache instance.
+        """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
