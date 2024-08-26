@@ -20,6 +20,27 @@ def count_calls(method: Callable) -> Callable:
     return invoker
 
 
+def call_history(method: Callable) -> Callable:
+    """ store the history of inputs and outputs.
+    """
+    @wraps(method)
+    def invoker(self, *args, **kwargs) -> Any:
+        """ Invokes the given method after caching it's input and output.
+        """
+        if isinstance(self._redis, redis.Redis):
+            input_key = method.__qualname__ + ":input"
+            output_key = method.__qualname__ + ":output"
+
+            self._redis.rpush(input_key, str(args))
+
+            output = self.method(*args, **kwargs)
+
+            self._redis.rpush(output_key, str(output))
+
+            return output
+        return invoker
+
+
 class Cache():
     """ caching system
     """
@@ -30,6 +51,7 @@ class Cache():
         self._redis.flushdb(True)
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ used to store data in the cache.
         """
